@@ -49,7 +49,9 @@ this.addEventListener('fetch', function(event) {
         var fixRes = new Response(res.body, Object.assign({}, res, {
           headers: Object.assign(headers, {
             'cache-control': 'public, max-age=0',
-            'cache-control-origin': headers['cache-control']
+            'cache-control-origin': headers['cache-control'] || '',
+            'expires': '',
+            'expires-origin': headers['expires'] || '',
           })
         }))
         return fixRes
