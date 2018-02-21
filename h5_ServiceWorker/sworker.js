@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 var cacheScope = location.origin
 var cacheScopeName = cacheScope + ' - version:' + Math.random().toString(36).substr(2)
@@ -29,6 +29,7 @@ this.addEventListener('activate', function(event) {
 this.addEventListener('fetch', function(event) {
   console.warn('-- fetch -->')
   console.table({
+    url: event.request.url,
     mode: event.request.mode,
     method: event.request.method
   })
@@ -37,7 +38,11 @@ this.addEventListener('fetch', function(event) {
     event.request.headers.get('accept').includes('text/html')
   )) {
     event.respondWith(
-      fetch(event.request.url).catch(function(error) {
+      fetch(event.request.url).then(function(res) {
+        console.info('[fetch the page success], why devtools\' offline don\'t work?')
+        return res
+      }).catch(function(error) {
+        console.warn('[fetch the page fail], really offline')
         // Return the offline page
         return caches.match('./offline.html')
       })
