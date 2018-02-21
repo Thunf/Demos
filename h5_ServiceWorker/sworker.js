@@ -39,10 +39,23 @@ this.addEventListener('fetch', function(event) {
   )) {
     event.respondWith(
       fetch(event.request.url).then(function(res) {
-        console.info('[fetch the page success], why devtools\' offline don\'t work?')
-        return res
+        // devtools' offline don't work
+        // because github "cache-control:max-age=600"
+        var headers = {}
+        res.headers.forEach(function(val, key) {headers[key] = val})
+        console.warn('[fetch the page success] headers:', headers, res)
+
+        // make text/html uncached
+        var fixRes = new Response(res.body, Object.assign({}, res, {
+          headers: Object.assign(headers, {
+            'cache-control': 'public, max-age=0',
+            'cache-control-origin': headers['cache-control']
+          })
+        }))
+        return fixRes
       }).catch(function(error) {
-        console.warn('[fetch the page fail], really offline')
+        console.warn('[fetch the page fail], show offline')
+        console.error('[fetch catch error]', error)
         // Return the offline page
         return caches.match('./offline.html')
       })
@@ -55,7 +68,10 @@ this.addEventListener('fetch', function(event) {
             return res.status === 200 ? cache.put(event.request.url, res.clone()).then(function() {
               return res
             }) : res
-          }).catch(function(res) { return res })
+          }).catch(function(error) {
+            console.error('[fetch catch error]', error)
+            return caches.match('./offline.svg')
+          })
         })
       })
     )
