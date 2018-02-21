@@ -7,7 +7,7 @@ this.addEventListener('install', function(event) {
   console.warn('-- install -->')
   event.waitUntil(
     caches.open(cacheScopeName).then(function(cache) {
-      return cache.addAll(['/offline.html', '/offline.svg'])
+      return cache.addAll(['./offline.html', './offline.svg'])
     }).then(this.skipWaiting())
   )
 })
@@ -39,7 +39,7 @@ this.addEventListener('fetch', function(event) {
     event.respondWith(
       fetch(event.request.url).catch(function(error) {
         // Return the offline page
-        return caches.match('/offline.html')
+        return caches.match('./offline.html')
       })
     )
   } else{
