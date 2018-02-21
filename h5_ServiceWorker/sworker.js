@@ -55,7 +55,7 @@ this.addEventListener('fetch', function(event) {
             return res.status === 200 ? cache.put(event.request.url, res.clone()).then(function() {
               return res
             }) : res
-          })
+          }).catch(function(res) { return undefined })
         })
       })
     )
