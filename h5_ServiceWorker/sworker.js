@@ -40,10 +40,9 @@ this.addEventListener('fetch', function(event) {
     event.respondWith(
       fetch(event.request.url).then(function(res) {
         // devtools' offline don't work
-        // because github "cache-control:max-age=600"
+        // because github "cache-control" & "expires"
         var headers = {}
         res.headers.forEach(function(val, key) {headers[key] = val})
-        console.warn('[fetch the page success] headers:', headers, res)
 
         // make text/html uncached
         var fixRes = new Response(res.body, Object.assign({}, res, {
@@ -54,10 +53,11 @@ this.addEventListener('fetch', function(event) {
             'expires-origin': headers['expires'] || '',
           })
         }))
+
+        console.warn('[fetch the page success], without cache')
         return fixRes
       }).catch(function(error) {
-        console.warn('[fetch the page fail], show offline')
-        console.error('[fetch catch error]', error)
+        console.error('[fetch page error] show offline, ', error)
         // Return the offline page
         return caches.match('./offline.html')
       })
@@ -71,7 +71,7 @@ this.addEventListener('fetch', function(event) {
               return res
             }) : res
           }).catch(function(error) {
-            console.error('[fetch catch error]', error)
+            console.error('[fetch error]', error)
             return caches.match('./offline.svg')
           })
         })
