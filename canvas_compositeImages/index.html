@@ -2,65 +2,49 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>合成图片</title>
 </head>
 <body>
-  <div class="container">
-    <div class="images" id="output">
-      <canvas id="save-pic"></canvas>
-      <img id="outputpic" src="" width="100%">
-      <img style="display: none;" src="./qrcode_320.png" width="100%"></div>
-    </div>  
-  <div class="qr-code" id="qr-code" style="display: none;"></div>
-  <input type="hidden" id="qrcode_url" value="{{urldecode($url)}}">
+  <div>项目留念</div>
+  <img id="output" width="320">
+  <div id="wrapper" style="display: none;"></div>
+  <canvas id="canvas" style="display: none;"></canvas>
 
-  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
   <script src="./qrcode.js"></script>
-
   <script>
+    var wrapper = document.getElementById('wrapper'),
+        output = document.getElementById('output'),
+        canvas = document.getElementById('canvas'),
+        cxt = canvas.getContext("2d")
+
+    showQRCode('https://thunf.cn')
+    setTimeout(createImgTag, 0)
+
     function showQRCode(url){
-        var showContent = $("#qr-code");
-        var qr = qrcode(10, "H");
-        qr.addData(url);
-        qr.make();
-        var code = qr.createImgTag(10);
-        showContent.append(code);
+      var qr = qrcode(3, "H")
+      qr.addData(url)
+      qr.make()
+      wrapper.innerHTML = qr.createImgTag(10)
     }
-
     function createImgTag() {
-        var canvas = $('#save-pic'),
-            c = canvas[0],
-            cxt=c.getContext("2d");
-
-        // 预设写死300*250
-        var w=$(window).width(),
-        h = w*968/320;
-        h = h>968?968:h;
-        $(c).attr('width', w);
-        $(c).attr('height', h);
-
-        var img = new Image();
-        img.src = './qrcode_320.png';
-        var w_img = (w-320)/2,h_img = (h-968)/2;
-        img.onload = function(){
-            cxt.drawImage(img, w_img, 0);
-        }
-
-        var eimg = $('#qr-code img');
-        var img2=new Image();
-        img2.src=eimg.attr('src');
-        img2.onload = function(){
-            cxt.drawImage(img2, 110+w_img, 195, 100, 100);
-            var image = c.toDataURL("./qrcode_320.png");
-            $('#outputpic').attr('src',image);
-             canvas.hide();
-        }
-        /*var image = c.toDataURL("./qrcode_320.png");
-        //canvas.hide().after('<img class="qr-last" src="'+image+'" alt="">');
-        */
-    };
-    showQRCode($('#qrcode_url').val());
-    setTimeout(createImgTag, 0);
+      var img = new Image()
+      img.src = './bg.png'
+      img.onload = function () {
+        canvas.width = img.width
+        canvas.height = img.height
+        cxt.drawImage(img, 0, 0)
+        drawQrcode(img.width, img.height)
+      }
+    }
+    function drawQrcode(width, height) {
+      var eimg = wrapper.getElementsByTagName('img')[0]
+      var img2 = new Image()
+      img2.src = eimg.src
+      img2.onload = function () {
+        cxt.drawImage(img2, 110/320 * width, 195/353 * height, 100, 100)
+        output.src = canvas.toDataURL()
+      }
+    }
   </script>
 </body>
 </html>
