@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>转盘抽奖</title>
+  <link rel="stylesheet/less" type="text/css" href="./style.less" />
+</head>
+<body>
+  <div class="module-1212choujiang">
+    <img src="./bg.jpg">
+    <div class="container">
+      <img class="circle" src="./turntable.png">
+      <img class="pointer" src="./point.png">
+    </div>
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+  <script>
+    var rotate = 0, timer = null, circle = $(".circle")
+
+    $(".pointer").on('click',function(e){
+      if (timer) return
+      // 校正
+      circleAllTime(360 - rotate % 360)
+      // 旋转
+      timer = setInterval(function(){circleAllTime(360)}, 60)
+      // 结果
+      setTimeout(function(){
+        clearInterval(timer)
+        // 随机结果
+        var random = Math.ceil(Math.random() * 4)
+        switch (random){
+          case 1: circleAllTime(360, '提额机会'); break;
+          case 2: circleAllTime(76, '10元服务费优惠券') ; break;
+          case 3: circleAllTime(219, '2元服务费优惠券'); break;
+          case 4: circleAllTime(290, '5元服务费优惠券'); break;
+          default:circleAllTime(147, '谢谢♪(･ω･)ﾉ'); break;
+        }
+      }, 5000)
+    })
+
+    function circleAllTime(num, text){
+      rotate += num;
+      circle.css({
+        '-webkit-transform': "rotate("+rotate+"deg)",
+        transform: "rotate("+rotate+"deg)"
+      })
+      // transition-duration: 5s;
+      text && setTimeout(function() {
+        timer = null
+        alert(text)
+      }, 5000)
+    }
+  </script>
+</body>
+</html>
