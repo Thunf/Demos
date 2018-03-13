@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>九宫格抽奖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet/less" type="text/css" href="./style.less" />
+</head>
+<body>
+  <div class="module-618choujiang">
+    <img src="./bg.jpg">
+    <div id="lottery">
+      <!-- 0 1 2 -->
+      <!-- 7 8 3 -->
+      <!-- 6 5 4 -->
+      <div data-index="0" class="square"></div>
+      <div data-index="1" class="square active"></div>
+      <div data-index="2" class="square"></div>
+      <div data-index="7" class="square"></div>
+      <div data-index="8" class="button"></div>
+      <div data-index="3" class="square"></div>
+      <div data-index="6" class="square"></div>
+      <div data-index="5" class="square"></div>
+      <div data-index="4" class="square"></div>
+    </div>
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+  <script>
+    var speed = 100,        // 频率
+        max = 45,           // 最少闪烁次数
+        prize = null,       // 奖品序号
+        rotating = false;   // 闪烁中
+
+    var wrapper = $('#lottery'),
+        current = wrapper.find('.active').data('index') || 0, // 当前位置
+        total = wrapper.find('.square').length,               // 总块数
+        times = current || 0;                                 // 转动次数
+
+    function toActive(idx) {
+      current = idx
+      wrapper.find('.active').removeClass('active')
+      wrapper.find('[data-index='+idx+']').addClass('active')
+    }
+
+    function rolling() {
+      rotating = true
+      // 激活下一块
+      toActive(times++ % total)
+
+      // 超出最少闪烁次数 且 当前是奖品时 : 停止转动
+      if (times > max + 10 && prize === current) {
+        // 下次从当前位置开始
+        times = current
+        // 重设初始速度
+        speed = 100
+        // 循环结束:提示
+        setTimeout(function() {
+          rotating = false
+          toast(prize)
+        }, speed)
+
+      } else {
+        // 调整频率: (无结果 或 最少转)前加速，否则减速
+        speed += (prize === null || times < max) ? -10 : 20
+        // 最小间隔70ms
+        speed = Math.max(speed, 40)
+        // 循环闪烁
+        setTimeout(rolling, speed)
+      }
+    }
+
+    function toast(id) {
+      alert({
+        0: '10元优惠券',       1: 'iPhone7',        2: '20元优惠券',
+        7: '神秘礼包',                              3: '100元箱包优惠券', 
+        6: '50元数码优惠券',    5: '5折服务费折扣券',  4: '100元家电优惠券',
+      }[id])
+    }
+
+    wrapper.find('.button').on('click', function() {
+      if (rotating) return
+      // 初始化奖品
+      prize = null
+      // 开始滚
+      rolling()
+
+      setTimeout(function() {
+        // 随机结果
+        prize = Math.floor(Math.random() * 8)
+        // 更新终止闪烁次数，最少45次
+        max = Math.max(times, 45)
+      }, Math.ceil(Math.random() * 10000))
+    });
+  </script>
+</body>
+</html>

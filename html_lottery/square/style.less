@@ -1,0 +1,76 @@
+html, body, div, img{
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+@media screen and (min-width: 412px) {
+  body {
+    max-width: 412px;
+    margin: auto;
+  }
+}
+
+.module-618choujiang{
+  position: relative;
+  animation: Opacity 1.2s ease-in-out 1;
+  overflow: hidden;
+
+  #lottery {
+    padding: 5% 7.1% 4%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+    box-sizing: border-box;
+    .button,
+    .square {
+      float: left;
+      position: relative;
+      width: 32.5%;
+      height: 32.5%;
+      margin: 0.1% 0.3%;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+    .active {
+      width: 33%;
+    }
+    .active:before,
+    .active:after {
+      content: '';
+      position: absolute;
+      background: transparent no-repeat center;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .active:before{
+      background-image: url('./active.png');
+      background-size: cover;
+      z-index: 1;
+    }
+    .active:after{
+      border-radius: 5px;
+      background-image: url('./bling.png');
+      background-size: contain;
+      animation: scrolling 2s ease-in infinite;
+      z-index: 0;
+    }
+  }
+}
+
+@keyframes Opacity {
+  0%  { opacity: 0 }
+  100%{ opacity: 1 }
+}
+
+@keyframes scrolling {
+  0%   {transform: translate(-50%, -50%);}
+  50%  {transform: translate( 50%,  50%);}
+  100% {transform: translate(100%, 100%);}
+}
