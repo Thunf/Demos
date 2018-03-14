@@ -1,0 +1,74 @@
+html, body, div, img {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+@media screen and (min-width: 412px) {
+  body {
+    max-width: 412px;
+    margin: auto;
+  }
+}
+
+.wrapper {
+  position: relative;
+  .container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 80%;
+    margin: auto;
+    perspective: 1000;
+  }
+  .lottery-wrap {
+    position: absolute;
+    top: 14%;
+    left: 14%;
+    right: 12%;
+    bottom: 14%;
+    width: auto;
+
+    .lottery-unit {
+      float: left;
+      position: relative;
+      width: 33%;
+      height: 31.3%;
+      margin: 1.6% 0 0 0;
+      transform: rotateY(0deg);
+      transform-style: preserve-3d;
+      transition: transform 0.8s ease-out;
+
+      .unit-front,
+      .unit-back {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: transparent center no-repeat;
+        background-size: contain;
+        backface-visibility: hidden;
+      }
+      .unit-front{
+        background-image: url(./front.png);
+      }
+      .unit-back {
+        border-radius: 3px;
+        border: 2px solid #9d4cfe;
+        background-color: #b879ff;
+        text-align: center;
+        transform: rotateY(180deg);
+        box-sizing: border-box;
+        width: 94%;
+        color: #fff;
+      }
+    }
+    .lottery-active {
+      transform: rotateY(180deg);
+    }
+  }
+}

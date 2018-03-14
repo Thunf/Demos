@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>翻牌抽奖</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet/less" type="text/css" href="./style.less" />
+</head>
+<body>
+  <div class="wrapper">
+    <img src="./bg.jpg">
+    <div class="container">
+      <img class="circle" src="./wrapper.png">
+      <div class="lottery-wrap"></div>
+    </div>
+  </div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+  <script>
+    var total = 9, list = [];
+    while(list.length < 9){list.push('你永远不知道下一个翻到啥')}
+    $('.lottery-wrap').append(list.map(function(item, index) {
+      var card = '<div class="lottery-unit">' +
+        '<div class="unit-front"></div>' +
+        '<div class="unit-back">' + item + '</div>' +
+      '</div>'
+      var empty = '<div class="lottery-unit"></div>'
+      return Math.ceil(total / 2) === (index + 1) ? empty : card
+    }))
+    $('.lottery-unit').on('click', function() {
+      $(this).toggleClass('lottery-active')
+    })
+  </script>
+</body>
+</html>
