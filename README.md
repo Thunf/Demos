@@ -13,6 +13,7 @@
 ## HTML
 - [x] [抽奖 - 转盘](https://thunf.github.io/Demos/html_lottery/turntable/)
 - [x] [抽奖 - 九宫格](https://thunf.github.io/Demos/html_lottery/square/)
+- [x] [抽奖 - 翻牌](https://thunf.github.io/Demos/html_lottery/card/)
 
 
 
