@@ -1,0 +1,48 @@
+html, body, div, img {
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  user-select: none;
+}
+
+@media screen and (min-width: 412px) {
+  body {
+    max-width: 412px;
+    margin: auto;
+  }
+}
+
+#wrapper {
+  position: relative;
+  .hand {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    width: 20%;
+    height: 25%;
+    background: transparent center no-repeat;
+    background-image: url('./hand.png');
+    background-size: contain;
+    animation: moveHands 2s linear .5s infinite;
+    overflow: hidden;
+  }
+}
+
+#grab,
+#walk {
+  position: absolute;
+  top: 10%;
+  left: 20%;
+  right: 20%;
+  bottom: 20%;
+  width: 60%;
+}
+#grab {
+  display: none;
+}
+
+@keyframes moveHands {
+  0%, 100%, 20%, 40%, 60%, 80% {transform: scale(1, 1); }
+  10%, 30%, 50%, 70%, 90% {transform: scale(1.2, 1.2); }
+}

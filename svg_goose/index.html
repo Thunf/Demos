@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>提鹅</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <link rel="stylesheet/less" type="text/css" href="./style.less" />
+</head>
+<body>
+  <div id="wrapper">
+    <img src="./bg.jpg">
+    <img src="./bg1.jpg">
+    <div id="walk">
+      <div class="hand"></div>
+    </div>
+    <div id="grab"></div>
+  </div>
+  <div>注：“提鹅”谐音“提额”</div>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+  <script src="//code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha256-3edrmyuQ0w65f8gfBsqowzjJe2iM6n0nKciPUp8y+7E=" crossorigin="anonymous"></script>
+
+  <script type="text/javascript"> window.GDATA = window.GDATA || {};</script>
+  <script src="./bodymovin.js"></script>
+  <script src="./grab.json.js"></script>
+  <script src="./walk.json.js"></script>
+
+  <script>
+    var wrapper = $('#wrapper'),
+        walk = $('#walk'),
+        grab = $('#grab'),
+        walking = bodymovin.loadAnimation({
+          container: walk[0],
+          renderer: "svg",
+          data: window.GDATA.walkData,
+          loop: true
+        }),
+        grabing = bodymovin.loadAnimation({
+          container: grab[0],
+          renderer: "svg",
+          data: window.GDATA.grabData,
+          autoplay: false,
+          loop: false
+        }),
+        isWalking = true;
+    
+    function toGrab() {
+      walk.hide()
+      grab.show()
+      grabing.goToAndPlay(0, false)
+      grabing.addEventListener('complete', function() {
+        grabing.goToAndPlay(500, false)
+      })
+      isWalking = false
+    }
+    function toWalk() {
+      grab.hide()
+      walk.show()
+      isWalking = true
+    }
+
+    wrapper.on('click', function() {
+      isWalking ? toGrab() : toWalk()
+    })
+  </script>
+</body>
+</html>
