@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">
+  <style>
+    * {margin: 0; padding: 0; border: 0; outline: 0; font-size: 100%; }
+    button {display: block; margin: 50px auto; padding: 0.8em 2em; border-radius: 0.5em; border: 1px solid currentColor; }
+    html, body {height: 100%;}
+
+    #app{
+      height: 100%;
+
+      /*
+       创建叠层上下文后，#app即生成新的叠层上下文，此时内部节点的z-index即以该叠层上下文为基准 
+       即在z-index此时：#app:auto < mask:100，dialog的101将不再与mask的100进行对比 
+       以下方式均会创建叠层上下文：
+       */
+
+      /* position: relative; */
+      /* z-index: 100; */
+      /* ---------------------------------:-; */
+
+      /* opacity: 0.9999; */
+      /* ---------------------------------:-; */
+
+      /* transform: translate(0); */
+      /* ---------------------------------:-; */
+
+      /* overflow: auto; */
+      /* -webkit-overflow-scrolling: touch; */
+      /* ---------------------------------:-; */
+
+      /* position: fixed; */
+      /* ---------------------------------:-; */
+
+      /* will-change:transform; */
+      /* ---------------------------------:-; */
+
+      /* isolation: isolate; */
+    }
+
+    /* 弹框 */
+    .popup-dialog{
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 300px;
+      background: lightgreen;
+      z-index: 101;
+    }
+    /* 遮罩 */
+    .popup-mask{
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      opacity: 0;
+      z-index: -1;
+    }
+    .popup-show{
+      opacity: 1;
+      z-index: 100;
+      transition: opacity 0.3s;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <button onClick="popup()"> CLICK </button>
+
+    <div style="font-size: 14px; color: orange; padding: 0 2em 1em;">
+      快速尝试：<br>
+      1、点击CLICK <br> 
+      2、打开控制台，开启#app上的对应属性
+    </div>
+
+<pre style="white-space: pre-wrap; padding: 0 1em;">
+【说明】
+  - 创建叠层上下文后，#app即生成新的叠层上下文，此时内部节点的z-index即以该叠层上下文为基准
+  - 即在z-index此时：#app:auto < mask:100，dialog的101将不再与mask的100进行对比
+  - 若#app上存在以下属性（各注释中的属性组合存在），均会创建叠层上下文：
+
+  /* position: relative;
+     z-index: 100; */
+     注：≯遮罩z-index
+
+  /* opacity: 0.9999; */
+     注：≠1即可
+
+  /* transform: translate(0); */
+     注：≠none即可
+
+  /* overflow: auto;
+     -webkit-overflow-scrolling: touch; */
+     注：-webkit-overflow-scrolling 手机端起效
+
+  /* position: fixed; */
+
+  /* will-change: transform; */
+
+  /* isolation: isolate; */
+
+  除以上还有：
+  { body.display=flex, #app.z-index≠auto }
+  时，也会创建层叠上下文
+</pre>
+
+    <div class="popup-dialog"> popup-dialog </div>
+  </div>
+  <div class="popup-mask" onClick="popdown()"></div>
+
+  <script>
+  function popup() {
+    document.querySelector('.popup-mask').classList.add('popup-show')
+    document.querySelector('.popup-dialog').style.display = 'block'
+  }
+  function popdown() {
+    document.querySelector('.popup-mask').classList.remove('popup-show')
+    document.querySelector('.popup-dialog').style.display = ''
+  }
+  </script>
+
+</body>
+</html>
