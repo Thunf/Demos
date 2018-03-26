@@ -35,7 +35,13 @@
       /* position: fixed; */
       /* ---------------------------------:-; */
 
+      /* filter: blur(0); */
+      /* ---------------------------------:-; */
+
       /* will-change:transform; */
+      /* ---------------------------------:-; */
+
+      /* mix-blend-mode: darken; */
       /* ---------------------------------:-; */
 
       /* isolation: isolate; */
@@ -117,13 +123,30 @@
   <div class="popup-mask" onClick="popdown()"></div>
 
   <script>
+  var app = document.querySelector('#app'),
+      mask = document.querySelector('.popup-mask'),
+      dialog = document.querySelector('.popup-dialog');
   function popup() {
-    document.querySelector('.popup-mask').classList.add('popup-show')
-    document.querySelector('.popup-dialog').style.display = 'block'
+    mask.classList.add('popup-show')
+    dialog.style.display = 'block'
   }
   function popdown() {
-    document.querySelector('.popup-mask').classList.remove('popup-show')
-    document.querySelector('.popup-dialog').style.display = ''
+    mask.classList.remove('popup-show')
+    dialog.style.display = ''
+  }
+  function addStyle(styles) {
+    for (key in styles) {
+      app.style[key] = styles[key]
+    }
+  }
+  switch( window.location.search.split('?').pop() ) {
+    case 'relative'   : {addStyle({position: 'relative', 'z-index': 100}); break;}
+    case 'opacity'    : {addStyle({opacity: 0.9999}); break;}
+    case 'transform'  : {addStyle({transform: 'translate(0)'}); break;}
+    case 'overflow'   : {addStyle({overflow: 'auto', '-webkit-overflow-scrolling': 'touch'}); break;}
+    case 'fixed'      : {addStyle({position: 'fixed'}); break;}
+    case 'will-change': {addStyle({'will-change': 'transform'}); break;}
+    case 'isolation'  : {addStyle({isolation: 'isolate'}); break;}
   }
   </script>
 
